@@ -1,6 +1,6 @@
-import { stages } from "konva/lib/Stage";
 import { useEffect, useState } from "react";
 import { Stage, Layer, Rect, Circle } from "react-konva";
+import { Grid } from "../grid/Grid";
 
 export type Coord = {
   x: number;
@@ -36,7 +36,6 @@ export const Planner2 = () => {
     const x = worldCoord.x * stageZoom + stageSize.width / 2;
     const y = -worldCoord.y * stageZoom + stageSize.height / 2;
     return { x, y };
-
   }
 
   // get mouse position on stage
@@ -52,7 +51,6 @@ export const Planner2 = () => {
   return (
     <>
       <p>
-        {" "}
         {JSON.stringify(stageStartCoord, null, 2)} {JSON.stringify(stageSize)}
       </p>
       <div style={{ width: stageSize.width, height: stageSize.height }}>
@@ -63,9 +61,13 @@ export const Planner2 = () => {
           style={{ border: "1px solid black" }}
         >
           <Layer>
-            <Rect width={50} height={50} fill="red" />
             <Circle x={cursorPos.x} y={cursorPos.y} stroke="black" radius={5} />
           </Layer>
+          <Layer>
+
+            <Grid stageSize={stageSize} stageWorldFocus={stageWorldFocus} stageZoom={stageZoom} />
+          </Layer>
+          
         </Stage>
       </div>
     </>
