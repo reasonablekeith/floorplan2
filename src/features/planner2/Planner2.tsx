@@ -1,30 +1,26 @@
 import { useEffect, useState } from "react";
 import { Stage, Layer, Rect, Circle } from "react-konva";
 import { Grid } from "../grid/Grid";
+import { Coord, Size, StageContext } from "../../contexts/StageContext";
 
-export type Coord = {
-  x: number;
-  y: number;
-};
-export type Size = {
-  width: number;
-  height: number;
-};
 
 export const Planner2 = () => {
   const [stageSize, setStageSize] = useState<Size>({ width: 800, height: 600 });
   const [stageWorldFocus, setStageWorldFocus] = useState<Coord>({ x: 0, y: 0 });
   const [stageZoom, setStageZoom] = useState<number>(50);
 
-  const [stageStartCoord, setStageStartCoord] = useState<Coord>({ x: 0, y: 0 });
-  const [cursorPos, setCursorPos] = useState<Coord>({ x: 0, y: 0 });
 
-  useEffect(() => {
-    setStageStartCoord({
-      x: stageWorldFocus.x - stageSize.width / 2 / stageZoom,
-      y: stageWorldFocus.y - stageSize.height / 2 / stageZoom,
-    });
-  }, [stageZoom, stageWorldFocus, stageWorldFocus, stageSize]);
+
+
+  // const [stageStartCoord, setStageStartCoord] = useState<Coord>({ x: 0, y: 0 });
+  const [cursorPos, setCursorPos] = useState<Coord>({ x: -10, y: -10 });
+
+  // useEffect(() => {
+  //   setStageStartCoord({
+  //     x: stageWorldFocus.x - stageSize.width / 2 / stageZoom,
+  //     y: stageWorldFocus.y - stageSize.height / 2 / stageZoom,
+  //   });
+  // }, [stageZoom, stageWorldFocus, stageWorldFocus, stageSize]);
 
   const getWorldCoordFromStageCoord = (stageCoord: Coord) => {
     const xOffset = stageCoord.x -(stageSize.width / 2);
@@ -67,6 +63,7 @@ export const Planner2 = () => {
         {JSON.stringify(stageStartCoord, null, 2)} {JSON.stringify(stageSize)}  {stageZoom}
       </p> */}
       <div style={{ width: stageSize.width, height: stageSize.height, }}>
+        <StageContext.Provider value={{ stageSize, stageWorldFocus, stageZoom, setStageSize, setStageWorldFocus, setStageZoom }}>
         <Stage
           width={stageSize.width}
           height={stageSize.height}
@@ -79,11 +76,13 @@ export const Planner2 = () => {
           </Layer>
           <Layer>
 
-            <Grid stageSize={stageSize} stageWorldFocus={stageWorldFocus} stageZoom={stageZoom} />
+            <Grid />
           </Layer>
           
         </Stage>
+        </StageContext.Provider>
       </div>
     </>
   );
 };
+

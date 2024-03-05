@@ -1,18 +1,20 @@
 import { Rect } from "react-konva";
-import { Coord, Size } from "../planner2/Planner2";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Coord, StageContext } from "../../contexts/StageContext";
 
 
-export const Grid = ({stageSize, stageWorldFocus, stageZoom}: {stageSize: Size, stageWorldFocus: Coord, stageZoom: number} ) => {
+export const Grid = () => {
 
   type GridLine = {
     start: Coord;
     direction: 'h' | 'v'
   }
 
+  const stageContext = useContext(StageContext);
+
   const getStageCoordFromWorldCoord = (worldCoord: Coord) => {
-    const x = worldCoord.x * stageZoom + stageSize.width / 2;
-    const y = -worldCoord.y * stageZoom + stageSize.height / 2;
+    const x = worldCoord.x * stageContext.stageZoom + stageContext.stageSize.width / 2;
+    const y = -worldCoord.y * stageContext.stageZoom + stageContext.stageSize.height / 2;
     return { x, y };
   }
 
@@ -21,13 +23,13 @@ export const Grid = ({stageSize, stageWorldFocus, stageZoom}: {stageSize: Size, 
   
   useEffect(() => {
     
-    const left = stageWorldFocus.x - stageSize.width / 2 / stageZoom;
-    const right = stageWorldFocus.x + stageSize.width / 2 / stageZoom;
-    const top = stageWorldFocus.y - stageSize.height / 2 / stageZoom;
-    const bottom = stageWorldFocus.y + stageSize.height / 2 / stageZoom;
+    const left = stageContext.stageWorldFocus.x - stageContext.stageSize.width / 2 / stageContext.stageZoom;
+    const right = stageContext.stageWorldFocus.x + stageContext.stageSize.width / 2 / stageContext.stageZoom;
+    const top = stageContext.stageWorldFocus.y - stageContext.stageSize.height / 2 / stageContext.stageZoom;
+    const bottom = stageContext.stageWorldFocus.y + stageContext.stageSize.height / 2 / stageContext.stageZoom;
 
     const tempGridLines: GridLine[] = [];
-    console.log('left', left, 'right', right, 'stageSize', stageSize, 'stageWorldFocus', stageWorldFocus, 'stageZoom', stageZoom)
+    console.log('left', left, 'right', right, 'stageSize', stageContext.stageSize, 'stageWorldFocus', stageContext.stageWorldFocus, 'stageZoom', stageContext.stageZoom)
     for (let x = left; x < right; x += 1) {
       const stageCoord = getStageCoordFromWorldCoord({x, y: 0});
       tempGridLines.push({ direction: 'v', start: {x: stageCoord.x, y: 0}} );
@@ -38,7 +40,7 @@ export const Grid = ({stageSize, stageWorldFocus, stageZoom}: {stageSize: Size, 
     }
 
     setGridLines(tempGridLines);
-  }, [stageSize, stageWorldFocus, stageZoom]);
+  }, [stageContext, getStageCoordFromWorldCoord]);
 
 
   return (
@@ -48,8 +50,8 @@ export const Grid = ({stageSize, stageWorldFocus, stageZoom}: {stageSize: Size, 
           key={index}
           x={line.start.x}
           y={line.start.y}
-          width={line.direction === 'h' ? stageSize.width : 1}
-          height={line.direction === 'v' ? stageSize.height : 1}
+          width={line.direction === 'h' ? stageContext.stageSize.width : 1}
+          height={line.direction === 'v' ? stageContext.stageSize.height : 1}
           fill="lightgrey"
         />
       ))}
