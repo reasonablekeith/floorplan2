@@ -9,6 +9,13 @@ export type Coord = {
   y: number;
 };
 
+export type StageBounds = {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+};
+
 export type StageContextType = {
   stageSize: Size;
   setStageSize: (size: Size) => void;
@@ -18,6 +25,7 @@ export type StageContextType = {
   setStageZoom: (zoom: number) => void;
   getWorldCoordFromStageCoord: (stageCoord: Coord) => Coord;
   getStageCoordFromWorldCoord: (worldCoord: Coord) => Coord;
+  getStageBounds: () => StageBounds;
 };
 export const StageContext = createContext<StageContextType>({
   stageSize: { width: 0, height: 0 },
@@ -28,4 +36,5 @@ export const StageContext = createContext<StageContextType>({
   setStageZoom: (zoom: number) => {},
   getWorldCoordFromStageCoord: (stageCoord: Coord) => ({ x: 0, y: 0 }),
   getStageCoordFromWorldCoord: (worldCoord: Coord) => ({ x: 0, y: 0 }),
+  getStageBounds: () => ({ left: 0, right: 0, top: 0, bottom: 0 }),
 });
