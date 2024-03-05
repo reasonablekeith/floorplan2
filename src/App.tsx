@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <div className="contentContainer">
-        <h1>Heading</h1>
+        <h1>Floor Planner</h1>
         <Planner2 />
       </div>
     </>

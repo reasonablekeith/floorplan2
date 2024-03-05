@@ -48,16 +48,30 @@ export const Planner2 = () => {
     }
   };
 
+  const handleMouseWheel = (e: any) => {
+    const scaleAmount = -e.evt.deltaY / 100;
+    var newStageZoom = stageZoom + scaleAmount;
+    if (newStageZoom < 10) {
+      newStageZoom = 10;
+    }
+    if (newStageZoom  > 200) {
+      newStageZoom = 200;
+    }
+    // e.preventDefault();
+    setStageZoom(newStageZoom);
+  }
+
   return (
     <>
-      <p>
-        {JSON.stringify(stageStartCoord, null, 2)} {JSON.stringify(stageSize)}
-      </p>
-      <div style={{ width: stageSize.width, height: stageSize.height }}>
+      {/* <p>
+        {JSON.stringify(stageStartCoord, null, 2)} {JSON.stringify(stageSize)}  {stageZoom}
+      </p> */}
+      <div style={{ width: stageSize.width, height: stageSize.height, }}>
         <Stage
           width={stageSize.width}
           height={stageSize.height}
           onMouseMove={handleMouseMove}
+          onWheel={handleMouseWheel}
           style={{ border: "1px solid black" }}
         >
           <Layer>
