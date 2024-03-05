@@ -9,7 +9,7 @@ export type WallType = {
   width: number;
 };
 
-export const Wall = ({ wall }: { wall: WallType }) => {
+export const Wall = ({ wall, handleWallClick = () => {} }: { wall: WallType, handleWallClick?: (wall: WallType) => void }) => {
   const stageContext = useContext(StageContext);
   const wallStageCoordStart = stageContext.getStageCoordFromWorldCoord(
     wall.start
@@ -18,11 +18,17 @@ export const Wall = ({ wall }: { wall: WallType }) => {
 
   const [mouseOver, setMouseOver] = useState<boolean>(false);
 
+  const handleClick = (wall: WallType) => {
+    console.log("clicked wall: ", wall);
+  };
+
+
   return (
     <>
       <Line
         onMouseOver={() => setMouseOver(true)}
         onMouseOut={() => setMouseOver(false)}
+        onClick={() => handleWallClick(wall)}
         points={[
           wallStageCoordStart.x,
           wallStageCoordStart.y,
