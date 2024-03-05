@@ -47,6 +47,9 @@ export const Planner2 = () => {
     };
   }
 
+  const snapWorldCoordToGrid = (worldCoord: Coord): Coord => {
+    return { x: +worldCoord.x.toFixed(0), y: +worldCoord.y.toFixed(0) }
+  }
 
 
   const [wallInProgress, setWallInProgress] = useState<WallInProgressType>({});
@@ -55,7 +58,7 @@ export const Planner2 = () => {
 
     const stagePos = e.target.getStage().getPointerPosition();
     const worldCoord = getWorldCoordFromStageCoord(stagePos);
-    setCursorPos(stagePos);
+    setCursorPos(getStageCoordFromWorldCoord( snapWorldCoordToGrid(worldCoord) ));
 
     switch (plannerState.currentState) {
       case 'idle':
@@ -63,7 +66,7 @@ export const Planner2 = () => {
       case 'addingWallStart':
         break;
       case 'addingWallEnd':
-        setWallInProgress({...wallInProgress, target: worldCoord});
+        setWallInProgress({...wallInProgress, target: snapWorldCoordToGrid(worldCoord)});
         break;
       }
   };
@@ -71,8 +74,8 @@ export const Planner2 = () => {
 
 
   const handleClick = (e: any) => {
-    const stagePos = e.target.getStage().getPointerPosition();
-    const worldCoord = getWorldCoordFromStageCoord(stagePos);
+    // const stagePos = e.target.getStage().getPointerPosition();
+    const worldCoord = getWorldCoordFromStageCoord(cursorPos);
 
     switch (plannerState.currentState) {
       case 'idle':
