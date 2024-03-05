@@ -10,7 +10,7 @@ export type WallType = {
   selectedUI?: boolean;
 };
 
-export const Wall = ({ wall, handleWallClick = () => {} }: { wall: WallType, handleWallClick?: (wall: WallType) => void }) => {
+export const PlannerWall = ({ wall, handleWallClick = () => {} }: { wall: WallType, handleWallClick?: (wall: WallType) => void }) => {
   const stageContext = useContext(StageContext);
   const wallStageCoordStart = stageContext.getStageCoordFromWorldCoord(
     wall.start

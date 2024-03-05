@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Stage, Layer, Rect, Circle } from "react-konva";
 import { Grid } from "../grid/Grid";
 import { Coord, Size, StageContext } from "../../contexts/StageContext";
-import { Wall, WallType } from "../wall/Wall";
+import { PlannerWall, WallType } from "../plannerWall/PlannerWall";
 import { v4 as uuid } from "uuid";
-import { Room } from "../room/Room";
+import { PlannerRoom } from "../plannerRoom/PlannerRoom";
 
 type PlannerState = {
   currentState:
@@ -287,7 +287,7 @@ export const Planner2 = () => {
             <Layer>
               <Grid />
               {walls.map((wall, index) => (
-                <Wall
+                <PlannerWall
                   key={index}
                   wall={wall}
                   handleWallClick={handleWallClick}
@@ -295,7 +295,7 @@ export const Planner2 = () => {
               ))}
 
               {wallInProgress.start && wallInProgress.target && (
-                <Wall
+                <PlannerWall
                   wall={{
                     uuid: uuid(),
                     start: wallInProgress.start,
@@ -329,7 +329,7 @@ export const Planner2 = () => {
           </p>
           <div>
             {rooms.map((room, index) => (
-              <Room key={index} room={room} onChange={handleRoomChange} addSelectedWalls={addSelectedWalls} />
+              <PlannerRoom key={index} room={room} onChange={handleRoomChange} addSelectedWalls={addSelectedWalls} />
             ))}
           </div>
         </StageContext.Provider>

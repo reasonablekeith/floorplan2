@@ -1,6 +1,6 @@
 import { RoomType } from "../planner2/Planner2"
 
-export const Room = ( {room, onChange, addSelectedWalls }: {room: RoomType, onChange: (room: RoomType) => void, addSelectedWalls: (uuid: string) => void} ) => {
+export const PlannerRoom = ( {room, onChange, addSelectedWalls }: {room: RoomType, onChange: (room: RoomType) => void, addSelectedWalls: (uuid: string) => void} ) => {
 
   const addWalls = () => {
     // get selected wall from context
