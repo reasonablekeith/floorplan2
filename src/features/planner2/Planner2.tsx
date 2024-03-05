@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Stage, Layer, Rect, Circle } from "react-konva";
 import { Grid } from "../grid/Grid";
 import { Coord, Size, StageContext } from "../../contexts/StageContext";
+import { Wall, WallType } from "../wall/Wall";
 
 
 export const Planner2 = () => {
@@ -34,6 +35,13 @@ export const Planner2 = () => {
     return { x, y };
   }
 
+  const someWalls: WallType[] = [
+    {uuid: '1', start: {x: 0, y: 0}, end: {x: 10, y: 0}, width: 1},
+    {uuid: '2', start: {x: 0, y: 0}, end: {x: 0, y: 10}, width: 1},
+    {uuid: '3', start: {x: 10, y: 0}, end: {x: 10, y: 10}, width: 1},
+    {uuid: '4', start: {x: 0, y: 10}, end: {x: 10, y: 10}, width: 1},
+  ]
+
   // get mouse position on stage
   const handleMouseMove = (e: any) => {
     const pos = e.target.getStage().getPointerPosition();
@@ -63,7 +71,7 @@ export const Planner2 = () => {
         {JSON.stringify(stageStartCoord, null, 2)} {JSON.stringify(stageSize)}  {stageZoom}
       </p> */}
       <div style={{ width: stageSize.width, height: stageSize.height, }}>
-        <StageContext.Provider value={{ stageSize, stageWorldFocus, stageZoom, setStageSize, setStageWorldFocus, setStageZoom }}>
+        <StageContext.Provider value={{ stageSize, stageWorldFocus, stageZoom, setStageSize, setStageWorldFocus, setStageZoom, getWorldCoordFromStageCoord, getStageCoordFromWorldCoord }}>
         <Stage
           width={stageSize.width}
           height={stageSize.height}
@@ -77,6 +85,9 @@ export const Planner2 = () => {
           <Layer>
 
             <Grid />
+            { someWalls.map((wall, index) => (  
+              <Wall key={index} wall={wall} />
+            )) }
           </Layer>
           
         </Stage>
