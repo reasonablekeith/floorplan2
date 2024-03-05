@@ -7,6 +7,7 @@ export type WallType = {
   start: Coord;
   end: Coord;
   width: number;
+  selectedUI?: boolean;
 };
 
 export const Wall = ({ wall, handleWallClick = () => {} }: { wall: WallType, handleWallClick?: (wall: WallType) => void }) => {
@@ -17,11 +18,6 @@ export const Wall = ({ wall, handleWallClick = () => {} }: { wall: WallType, han
   const wallStageCoordEnd = stageContext.getStageCoordFromWorldCoord(wall.end);
 
   const [mouseOver, setMouseOver] = useState<boolean>(false);
-
-  const handleClick = (wall: WallType) => {
-    console.log("clicked wall: ", wall);
-  };
-
 
   return (
     <>
@@ -35,7 +31,7 @@ export const Wall = ({ wall, handleWallClick = () => {} }: { wall: WallType, han
           wallStageCoordEnd.x,
           wallStageCoordEnd.y,
         ]}
-        stroke={mouseOver? 'red' : 'black'}
+        stroke={wall.selectedUI ? 'blue' : mouseOver? 'red' : 'black'}
         strokeWidth={(wall.width * stageContext.stageZoom) / 10}
       />
     </>

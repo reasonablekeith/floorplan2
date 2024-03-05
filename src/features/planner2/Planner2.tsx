@@ -51,6 +51,7 @@ export const Planner2 = () => {
 
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [uiSelector, setUISelector] = useState<SelectorType>({});
+  const [uiSelectedUUIDs, uiSetSelectedUUIDs] = useState<string[]>([]);
 
   const [cursorPos, setCursorPos] = useState<Coord>({ x: -10, y: -10 });
   const getWorldCoordFromStageCoord = (stageCoord: Coord) => {
@@ -63,6 +64,18 @@ export const Planner2 = () => {
     const y = -worldCoord.y * stageZoom + stageSize.height / 2;
     return { x, y };
   };
+
+
+  // update the selectedUI state of the rooms  
+  useEffect(() => {
+    setWalls(walls.map((wall) => {
+      return {
+        ...wall,
+        selectedUI: uiSelectedUUIDs.includes(wall.uuid)
+      }
+    }))
+  }, [uiSelectedUUIDs, uiSetSelectedUUIDs]);
+
 
   const getStageBounds = () => {
     return {
@@ -124,12 +137,17 @@ export const Planner2 = () => {
           end: getStageCoordFromWorldCoord(worldCoord),
         });
         if (uiSelector.start && uiSelector.end) {
-          getWallsInBound(getWorldCoordFromStageCoord(uiSelector.start), worldCoord);
+          uiSetSelectedUUIDs(getWallsInBound(getWorldCoordFromStageCoord(uiSelector.start), worldCoord));
         }
         // get the selected items
         break;
     }
   };
+
+  const handleDeleteSelected = () => {
+    setWalls(walls.filter((wall) => !uiSelectedUUIDs.includes(wall.uuid)));
+    uiSetSelectedUUIDs([]);
+  }
 
   const handleWallClick = (wall: WallType) => {
     if (plannerState.currentState === "deleteWall") {
@@ -215,6 +233,7 @@ export const Planner2 = () => {
         >
           Delete Wall
         </button>
+        <button disabled={uiSelectedUUIDs.length === 0} onClick={handleDeleteSelected}>Delete Selected</button>
         <button
           onClick={() => {
             setPlannerState({ currentState: "selectStart" });
