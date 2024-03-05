@@ -11,15 +11,20 @@ export type WallInProgressType = {
   end?: Coord;
 }
 
+const someWalls: WallType[] = [
+  {uuid: '1', start: {x: 0, y: 0}, end: {x: 10, y: 0}, width: 3},
+  {uuid: '2', start: {x: 0, y: 0}, end: {x: 0, y: 10}, width: 3},
+  {uuid: '3', start: {x: 10, y: 0}, end: {x: 10, y: 10}, width: 3},
+  {uuid: '4', start: {x: 0, y: 10}, end: {x: 10, y: 10}, width: 3},
+]
 
 export const Planner2 = () => {
   const [stageSize, setStageSize] = useState<Size>({ width: 800, height: 600 });
   const [stageWorldFocus, setStageWorldFocus] = useState<Coord>({ x: 0, y: 0 });
   const [stageZoom, setStageZoom] = useState<number>(50);
-
-
   const [plannerState, setPlannerState] = useState<PlannerState>({currentState: 'idle'});
 
+  const [walls, setWalls] = useState<WallType[]>(someWalls);
 
   const [cursorPos, setCursorPos] = useState<Coord>({ x: -10, y: -10 });
   const getWorldCoordFromStageCoord = (stageCoord: Coord) => {
@@ -42,12 +47,7 @@ export const Planner2 = () => {
     };
   }
 
-  const someWalls: WallType[] = [
-    {uuid: '1', start: {x: 0, y: 0}, end: {x: 10, y: 0}, width: 3},
-    {uuid: '2', start: {x: 0, y: 0}, end: {x: 0, y: 10}, width: 3},
-    {uuid: '3', start: {x: 10, y: 0}, end: {x: 10, y: 10}, width: 3},
-    {uuid: '4', start: {x: 0, y: 10}, end: {x: 10, y: 10}, width: 3},
-  ]
+
 
   const [wallInProgress, setWallInProgress] = useState<WallInProgressType>({});
   // get mouse position on stage
@@ -84,8 +84,13 @@ export const Planner2 = () => {
         break;
       case 'addingWallEnd':
         console.log('addingWallEnd', worldCoord);
+        
         setPlannerState({currentState: 'idle'});
-
+        if (wallInProgress.start && wallInProgress.target) {
+          const newWall: WallType = {uuid: 'temp', start: wallInProgress.start, end: worldCoord, width: 3};
+          setWalls([...walls, newWall]);
+          setWallInProgress({});
+        }
         break;
       }
     }
@@ -128,7 +133,7 @@ export const Planner2 = () => {
             <Layer>
 
               <Grid />
-              { someWalls.map((wall, index) => (  
+              { walls.map((wall, index) => (  
                 <Wall key={index} wall={wall} />
               )) }
 
