@@ -24,7 +24,7 @@ export type WallInProgressType = {
 export type RoomType = {
   uuid: string;
   name: string;
-  walls: WallType[];
+  wallUUIDs: string[];
 };
 
 type SelectorType = {
@@ -148,6 +148,16 @@ export const Planner2 = () => {
     setWalls(walls.filter((wall) => !uiSelectedUUIDs.includes(wall.uuid)));
     uiSetSelectedUUIDs([]);
   }
+
+  const addSelectedWalls = (uuid: string) => {
+    const room = rooms.find((r) => r.uuid === uuid);
+    if (room) {
+      const newWallUUIDs = walls.filter((wall) => uiSelectedUUIDs.includes(wall.uuid)).map(r => r.uuid);
+      room.wallUUIDs = Array.from(new Set([...room.wallUUIDs, ...newWallUUIDs]));
+      setRooms(rooms.map((r) => (r.uuid === room.uuid ? room : r)));
+    }
+  }
+
 
   const handleWallClick = (wall: WallType) => {
     if (plannerState.currentState === "deleteWall") {
@@ -311,7 +321,7 @@ export const Planner2 = () => {
           <p>
             <button
               onClick={() => {
-                setRooms([...rooms, { uuid: uuid(), name: "room", walls: [] }]);
+                setRooms([...rooms, { uuid: uuid(), name: "room", wallUUIDs: [] }]);
               }}
             >
               Add Room
@@ -319,7 +329,7 @@ export const Planner2 = () => {
           </p>
           <div>
             {rooms.map((room, index) => (
-              <Room key={index} room={room} onChange={handleRoomChange} />
+              <Room key={index} room={room} onChange={handleRoomChange} addSelectedWalls={addSelectedWalls} />
             ))}
           </div>
         </StageContext.Provider>

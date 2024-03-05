@@ -17,6 +17,7 @@ body {
   min-height: 100vh;
   background-color: white;
   padding: 1em;
+  padding-bottom: 300px;
 }
 
 .stage {
